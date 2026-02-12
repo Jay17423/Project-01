@@ -59,5 +59,3 @@
   (io/make-parents "data/cleaned/transactions_clean.csv")
   (with-open [w (io/writer "data/cleaned/transactions_clean.csv")]
     (csv/write-csv w rows)))
-
-(write-csv (clean-csv))

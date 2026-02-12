@@ -24,3 +24,5 @@
      (str opensearch-url "/_bulk")
      {:headers {"Content-Type" "application/x-ndjson"}
       :body (bulk-body docs)})))
+
+
