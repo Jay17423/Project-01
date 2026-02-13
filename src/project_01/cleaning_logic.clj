@@ -7,13 +7,13 @@
    [java.time LocalDate]
    [java.time.format DateTimeFormatter DateTimeParseException]))
 
-
-
 (defn read-transactions []
   "Read raw CSV data"
-  (with-open [r (io/reader (io/resource "raw/transaction-1k.csv"))]
-    (doall (csv/read-csv r))))
-
+  (let [res (io/resource "raw/transaction-1k.csv")]
+    (when-not res
+      (throw (Exception. "CSV file not found: raw/transaction-1k.csv")))
+    (with-open [r (io/reader res)]
+      (doall (csv/read-csv r)))))
 
 (def formatter (DateTimeFormatter/ofPattern "yyyy-MM-dd"))
 
@@ -26,7 +26,7 @@
 
 
 (defn safe-parse-double [s]
-  "Convt amount(int) to float for Atomicity"
+  "Convt amount(int) to dobule for Atomicity"
   (try
     (Double/parseDouble s)
     (catch Exception _
@@ -36,7 +36,7 @@
 (defn clean-row [row]
   "Clean the CSV data by applying above three function
    -> Change all string into lower-case
-   -> valid-data? will validate the date
+   -> valid-date? will validate the date
    -> safe-parse-double will change the data type of amount into double"
   (as-> row r
     (map #(str/lower-case (str/trim %)) r)

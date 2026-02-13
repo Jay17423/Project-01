@@ -4,10 +4,21 @@
    [project-01.bulk-post :as bulk]))
 
 (defn -main []
-  (println "Starting CSV cleaning...")
-  (clean/write-csv (clean/clean-csv))
+  "Runs the CSV cleaning pipeline and performs bulk ingestion into OpenSearch."
+  (try
+    (println "Starting CSV cleaning...")
+    (clean/write-csv (clean/clean-csv))
 
-  (println "CSV cleaned. Starting bulk ingest...")
-  (bulk/bulk-insert!)
+    (println "CSV cleaned. Starting bulk ingest...")
+    (bulk/bulk-insert!)
 
-  (println "Bulk ingest completed."))
+    (println "Bulk ingest completed.")
+
+    (catch java.net.ConnectException e
+      (println "ERROR: OpenSearch is not running")
+      (println (.getMessage e))
+      (System/exit 1))
+
+    (catch Exception e
+      (println "ERROR:" (.getMessage e))
+      (System/exit 1))))

@@ -9,6 +9,7 @@
 (def index-name "transactions")
 
 (defn bulk-body [docs]
+  "Creates bulk body for ingestion of data into OpenSearch"
   (->> docs
        (mapcat (fn [doc]
                  [{:create {:_index index-name
@@ -19,6 +20,7 @@
        (#(str % "\n"))))
 
 (defn bulk-insert! []
+  "Ingest the data into OpenSearch using BulkApi"
   (let [docs (read-csv)]
     (http/post
      (str opensearch-url "/_bulk")
