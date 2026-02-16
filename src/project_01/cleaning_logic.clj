@@ -26,7 +26,7 @@
 
 
 (defn safe-parse-double [s]
-  "Convt amount(int) to dobule for Atomicity"
+  "Convt amount(int) to dobule "
   (try
     (Double/parseDouble s)
     (catch Exception _
