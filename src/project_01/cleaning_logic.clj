@@ -7,6 +7,8 @@
    [java.time LocalDate]
    [java.time.format DateTimeFormatter DateTimeParseException]))
 
+(def formatter (DateTimeFormatter/ofPattern "yyyy-MM-dd"))
+
 (defn read-transactions []
   "Read raw CSV data"
   (let [res (io/resource "raw/transaction-1k.csv")]
@@ -14,8 +16,6 @@
       (throw (Exception. "CSV file not found: raw/transaction-1k.csv")))
     (with-open [r (io/reader res)]
       (doall (csv/read-csv r)))))
-
-(def formatter (DateTimeFormatter/ofPattern "yyyy-MM-dd"))
 
 (defn valid-date? [s]
   "Validate the date"

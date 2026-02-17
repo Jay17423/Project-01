@@ -5,15 +5,9 @@
 
 (defn -main []
   "Runs the CSV cleaning pipeline and performs bulk ingestion into OpenSearch."
-  (try
-    (println "Starting CSV cleaning...")
+  (try 
     (clean/write-csv (clean/clean-csv))
-
-    (println "CSV cleaned. Starting bulk ingest...")
-    (bulk/bulk-insert!)
-
-    (println "Bulk ingest completed.")
-
+    (bulk/bulk-insert!) 
     (catch java.net.ConnectException e
       (println "ERROR: OpenSearch is not running")
       (println (.getMessage e))
