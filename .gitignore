@@ -1,40 +1,72 @@
-pom.xml
-pom.xml.asc
-*.jar
+# =========================
+# Clojure / JVM
+# =========================
+/target
+/.cpcache
+/.rebel_readline_history
+/.nrepl-port
+/.shadow-cljs
+/.lein-failures
+/.lein-plugins
+/.eastwood
+/.clj-kondo/.cache
+
+# =========================
+# Build & class files
+# =========================
 *.class
-/lib/
-/classes/
-/target/
-/checkouts/
-.lein-deps-sum
-.lein-repl-history
-.lein-plugins/
-.lein-failures
-.nrepl-port
-.cpcache/
+*.jar
+*.war
+*.ear
 
-.hgignore
-.hg/
-/.prepl-port
-/checkouts
-profiles.clj
+# =========================
+# Logs
+# =========================
+*.log
+logs/
+
+log/
+
+# =========================
+# Config / Secrets
+# =========================
+config.edn
+config/*.edn
+.env
+.env.*
+*.keystore
+*.jks
+*.p12
+
+# =========================
+# OS / Editor junk
+# =========================
+.DS_Store
+Thumbs.db
 .idea/
-/.lein-*
-.idea/
+.vscode/
 *.iml
-.vscode
-.lsp/*
-.clj-kondo/*
-.calva/*
 
-/.shadow-cljs/
+# =========================
+# Node (if frontend / tooling)
+# =========================
 node_modules/
+dist/
+build/
 
+# =========================
+# Temp / Backup files
+# =========================
+*~
+*.swp
+*.tmp
+*.bak
 
-
-
-
-
+# =========================
+# Test coverage / reports
+# =========================
+coverage/
+reports/
 
 
 
