@@ -1,0 +1,16 @@
+(ns data-loader.config
+  (:require
+   [omniconf.core :as cfg]))
+
+(cfg/define
+  {:input-path {:description "CSV file path"
+                :type :string
+                :required true}
+
+   :db-url     {:description "Database URL"
+                :type :string
+                :required true}
+
+   :index-name {:description "Database index name"
+                :type :string
+                :required true}})
