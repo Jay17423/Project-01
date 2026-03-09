@@ -3,22 +3,24 @@
    [mount.core :as mount]
    [data-loader.clean-data :as clean]
    [data-loader.ingestion :as ingest]
-   [data-loader.config]
    [data-loader.db-config]
    [omniconf.core :as cfg]
-   [taoensso.timbre :as log]))
+   [taoensso.timbre :as log]
+   [data-loader.config :as cnfg]))
 
 (defn -main []
   (try
-    (cfg/populate-from-file "config.edn")
-    (cfg/verify :silent true)
+    (log/info "Starting data ingestion pipeline")
+    (cnfg/load-config! "config.edn")
     (mount/start)
     (let [docs (clean/read-and-clean-csv (cfg/get :input-path))]
+      (log/info "Read CSV records" {:count (count docs)})
       (ingest/ingest-data!
        (cfg/get :index-name)
        docs))
     (mount/stop)
-    (catch Exception e
-      (log/error e "Pipeline failed")
+    (log/info "Pipeline completed successfully")
+    (catch Exception err
+      (log/error err "Data ingest pipeline failed")
       (mount/stop)
       (System/exit 1))))

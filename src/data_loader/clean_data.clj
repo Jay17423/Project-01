@@ -12,8 +12,16 @@
       str/trim
       str/lower-case))
 
+(defn rename-field
+  "Change loc to location and ts to timestamp"
+  [field]
+  (case field
+    "loc" "location"
+    "ts"  "timestamp"
+    field))
+
 (defn parse-double-safe
-  "Parse value as double return 0.0 if not parsable"
+  "Parses a value as double. Returns 0.0 if it cannot be parsed."
   [value]
   (try
     (double (Double/parseDouble (str value)))
@@ -37,17 +45,17 @@
     :else         v))
 
 (defn row->map
-  "This will convt row data into map with header as key and row as value"
+  "Convt row data into map with header as key and row as value"
   [header row]
   (->> (zipmap header row)
        (map
         (fn [[k v]]
-          (let [key (keyword (normalize-string k))]
-            (if (= key :item)
+          (let [field (keyword (rename-field (normalize-string k)))]
+            (if (= field :item)
               (merge
                {k (normalize-string v)}
                (split-item v))
-              {key (clean-value key v)}))))
+              {field (clean-value field v)}))))
        (apply merge)))
 
 (defn read-and-clean-csv
@@ -57,8 +65,8 @@
     (when-not res
       (throw (ex-info "CSV file not found" {:path resource-path})))
     (with-open [read (io/reader res)]
-      (->> (csv/read-csv read) 
+      (->> (csv/read-csv read)
            ((fn [[header & rows]]
-              (doall (map #(row->map header %) rows))))))))
+              (mapv #(row->map header %) rows)))))))
 
 
